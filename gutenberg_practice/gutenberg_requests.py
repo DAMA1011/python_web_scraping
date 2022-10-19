@@ -1,5 +1,4 @@
-import os, re, time, json, pprint
-from tkinter import SEL_FIRST
+import os, re, time
 import requests as req
 from bs4 import BeautifulSoup as bs
 
@@ -21,7 +20,7 @@ url = 'https://www.gutenberg.org/browse/languages/zh'
 list_book = []  # 第一頁中文書名及網頁連結
 list_content = []  # 第二頁網頁連結
 
-# 取得第一頁的所有中文書名連結
+# 1) 取得第一頁的所有中文書名連結
 def getFirstLinks():
     # 用 requests 的 get 方法把網頁抓下來
     resFirst = req.get(url, headers = my_headers)
@@ -30,21 +29,19 @@ def getFirstLinks():
 
     # 取得第一頁所有連結的元素
     for aFirstLinks in soupFirst.select('div.pgdbbylanguage li.pgdbetext a'):
-        # 篩選中文書名
+        # 篩選中文書名及處理例外符號
         regex = r'\b[\u4E00-\u9FFF]+.*\b'
-        match = re.match(regex, aFirstLinks.text)
-
+        findall = re.findall(regex, aFirstLinks.text)
+        for word in findall:
+            sub = re.sub(r'\r|:', ' ', word)
+        
         # 寫入第一頁中文書名及網頁連結
-        if match != None:
             list_book.append({
-                'title': aFirstLinks.text,
-                'firstlink': 'https://www.gutenberg.org' + aFirstLinks['href'],
-
+                'title': sub,
+                'firstlink': 'https://www.gutenberg.org' + aFirstLinks['href']
                 })
 
-    list_book.pop(121)  # 刪除"臺灣通史\r唐山過海的故事"這篇，因為書名有例外字元，無法建立檔名
-
-# 取得第二頁的所有"Plain Text UTF-8"連結
+# 2) 取得第二頁的所有"Plain Text UTF-8"連結
 def getSecondLinks():    
     for i in range(200):
         # 用 requests 的 get 方法把網頁抓下來
@@ -62,7 +59,7 @@ def getSecondLinks():
             if match != None:
                 list_content.append(aSecondLinks['about'])
      
-# 取得所有"Plain Text UTF-8"連結內部的內容，並寫出成 .txt 檔案
+# 3) 取得所有"Plain Text UTF-8"連結內部的內容，並寫出成 .txt 檔案
 def writeConten():
     for i in range(len(list_content)):
         # 用 requests 的 get 方法把網頁抓下來
@@ -90,4 +87,4 @@ if __name__ == '__main__':
     getFirstLinks()
     getSecondLinks()
     writeConten()
-    print(f'執行總花費時間: {time.time() - time1}')  # 433 s
+    print(f'執行總花費時間: {time.time() - time1}')  # 539 s
