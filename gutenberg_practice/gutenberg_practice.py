@@ -1,19 +1,3 @@
-# 操作 browser 的 API
-from selenium.webdriver.chrome.service import Service
-from selenium import webdriver
-
-# 處理逾時例外的工具
-from selenium.common.exceptions import TimeoutException
-
-# 面對動態網頁，等待某個元素出現的工具，通常與 exptected_conditions 搭配
-from selenium.webdriver.support.ui import WebDriverWait
-
-# 搭配 WebDriverWait 使用，對元素狀態的一種期待條件，若條件發生，則等待結束，往下一行執行
-from selenium.webdriver.support import expected_conditions as EC
-
-# 期待元素出現要透過什麼方式指定，通常與 EC、WebDriverWait 一起使用
-from selenium.webdriver.common.by import By
-
 # 強制等待 (執行期間休息一下)
 from time import sleep
 
@@ -127,10 +111,7 @@ for index, link_book in enumerate(list_book):
                 i += 1
 
                 # 休眠
-                sleep(3)
-
-
-
+                # sleep(3)
 
 
 # # 單一爬取
@@ -155,12 +136,3 @@ for index, link_book in enumerate(list_book):
 #     for str in result:
 #         file.write(str)
 # print("data 已完成")
-
-
-
-
-
-
-
-# 關閉瀏覽器
-# driver.quit()
