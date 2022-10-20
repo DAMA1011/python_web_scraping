@@ -42,7 +42,6 @@ my_driver = webdriver.Chrome(
 url = 'https://www.gutenberg.org/browse/languages/zh'
 
 list_book = []  # 第一頁中文書名及網頁連結
-list_content = []  # 第二頁網頁連結
 
 # 取得小說的主要連結
 def getBooksName():
@@ -58,7 +57,7 @@ def getBooksName():
     
 def getContents():
     try:
-        for i in range(10):
+        for i in range(1, 2):
 
             my_driver.find_element(By.LINK_TEXT, list_book[i]).click()
             sleep(2)
@@ -66,7 +65,19 @@ def getContents():
             my_driver.find_element(By.LINK_TEXT, 'Plain Text UTF-8').click()
             sleep(2)
             # 寫入資料
-            print(list_book[i])
+
+            body = my_driver.find_element(By.CSS_SELECTOR, '*')
+            content = body.get_attribute('innerText')
+            
+            regex = r'\b[\u4E00-\u9FFF]+\W+\b'
+            result = re.findall(regex, content)
+            print(result)
+            # title = re.sub(r'\n|:', ' ', list_book[i])
+
+            # with open(f'content/[{i+1}]{title}.txt', mode='w', encoding='utf-8') as file:
+            #     for str in result:
+            #         file.write(str)      
+            #     print(f'{[i+1]}{list_book[i]} 已完成')
 
             my_driver.get(url)
             sleep(2)
