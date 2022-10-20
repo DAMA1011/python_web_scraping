@@ -63,16 +63,9 @@ def getContents():
             my_driver.find_element(By.LINK_TEXT, list_book[i]).click()
             sleep(2)
 
-
             my_driver.find_element(By.LINK_TEXT, 'Plain Text UTF-8').click()
             sleep(2)
-
-
-
             # 寫入資料
-
-
-
             print(list_book[i])
 
             my_driver.get(url)
