@@ -19,7 +19,7 @@ my_headers = {
 }
 
 # 建立資料夾
-folderPath = 'content'
+folderPath = 'contentse'
 if not os.path.exists(folderPath):
     os.makedirs(folderPath)
 
@@ -57,30 +57,30 @@ def getBooksName():
     
 def getContents():
     try:
-        for i in range(1, 2):
+        for i in range(200):
 
             my_driver.find_element(By.LINK_TEXT, list_book[i]).click()
-            sleep(2)
+            # sleep(2)
 
             my_driver.find_element(By.LINK_TEXT, 'Plain Text UTF-8').click()
-            sleep(2)
-            # 寫入資料
+            # sleep(2)
 
+            # 寫入資料
             body = my_driver.find_element(By.CSS_SELECTOR, '*')
             content = body.get_attribute('innerText')
             
             regex = r'\b[\u4E00-\u9FFF]+\W+\b'
             result = re.findall(regex, content)
-            print(result)
-            # title = re.sub(r'\n|:', ' ', list_book[i])
 
-            # with open(f'content/[{i+1}]{title}.txt', mode='w', encoding='utf-8') as file:
-            #     for str in result:
-            #         file.write(str)      
-            #     print(f'{[i+1]}{list_book[i]} 已完成')
+            title = re.sub(r'\n|:', ' ', list_book[i])
+
+            with open(f'contentse/[{i+1}]{title}.txt', mode='w', encoding='utf-8') as file:
+                for str in result:
+                    file.write(str)      
+                print(f'{[i+1]}{list_book[i]} 已完成')
 
             my_driver.get(url)
-            sleep(2)
+            # sleep(2)
 
     except TimeoutException:
         print('等待逾時!')

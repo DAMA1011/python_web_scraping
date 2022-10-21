@@ -3,14 +3,14 @@ import requests as req
 from bs4 import BeautifulSoup as bs
 
 # 隨機取得 User-Agent
-from fake_useragent import UserAgent
-ua = UserAgent(cache = True)  # cache=True 表示從已經儲存的列表中提取
-my_headers = {
-    'user-agent': ua.random
-}
+# from fake_useragent import UserAgent
+# ua = UserAgent(cache = True)  # cache=True 表示從已經儲存的列表中提取
+# my_headers = {
+#     'user-agent': ua.random
+# }
 
 # 建立資料夾
-folderPath = 'content'
+folderPath = 'contentre'
 if not os.path.exists(folderPath):
     os.makedirs(folderPath)
 
@@ -23,7 +23,8 @@ list_content = []  # 第二頁網頁連結
 # 1) 取得第一頁的所有中文書名連結
 def getFirstLinks():
     # 用 requests 的 get 方法把網頁抓下來
-    resFirst = req.get(url, headers = my_headers)
+    # resFirst = req.get(url, headers = my_headers)
+    resFirst = req.get(url)
     # 指定 lxml 作為解析器
     soupFirst = bs(resFirst.text, 'lxml')
 
@@ -45,7 +46,8 @@ def getFirstLinks():
 def getSecondLinks():    
     for i in range(200):
         # 用 requests 的 get 方法把網頁抓下來
-        resSecond = req.get(list_book[i]['firstlink'], headers = my_headers)
+        # resSecond = req.get(list_book[i]['firstlink'], headers = my_headers)
+        resSecond = req.get(list_book[i]['firstlink'])
         # 指定 lxml 作為解析器
         soupSecond = bs(resSecond.text, 'lxml')
 
@@ -63,7 +65,8 @@ def getSecondLinks():
 def writeConten():
     for i in range(len(list_content)):
         # 用 requests 的 get 方法把網頁抓下來
-        resContent = req.get(list_content[i], headers = my_headers)
+        # resContent = req.get(list_content[i], headers = my_headers)
+        resContent = req.get(list_content[i])
         # 指定回傳資料的編碼
         resContent.encoding = 'utf-8'
         # 指定 lxml 作為解析器
@@ -76,7 +79,7 @@ def writeConten():
         result = re.findall(regex, content)
 
         # 透過 with open 將內容寫出成 .txt 檔
-        with open(f'content/[{i+1}]{list_book[i]["title"]}.txt', mode='w', encoding='utf-8') as file:
+        with open(f'contentre/[{i+1}]{list_book[i]["title"]}.txt', mode='w', encoding='utf-8') as file:
             for str in result:
                 file.write(str)
             print(f'[{i+1}]{list_book[i]["title"]} 已完成')
