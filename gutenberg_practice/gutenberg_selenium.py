@@ -93,4 +93,4 @@ if __name__ == '__main__':
     getBooksName()
     getContents()
     close()
-    print(f'執行總花費時間: {time.time() - time1}')
+    print(f'執行總花費時間: {time.time() - time1}')  # 467 s
